@@ -40,7 +40,13 @@ public class Note implements Comparable<Note>
 	
 	public int compareTo(Note o)
 	{
-		return date.compareTo(o.date);
+		int output = date.compareTo(o.date);
+		if (output == -1)
+			return 1;
+		else if (output == 1)
+			return -1;
+		else
+			return 0;
 	}
 	
 	public String toString()
