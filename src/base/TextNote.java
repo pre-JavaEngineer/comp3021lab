@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
-import java.io.ObjectOutputStream;
 
 
 public class TextNote extends Note 
@@ -71,13 +70,13 @@ public class TextNote extends Note
 			pathFolder = "C:\\Users\\Fong\\git\\comp3021lab" + File.separator + pathFolder;
 		}
 		File file = new File( pathFolder + File.separator + title + ".txt");
-		FileOutputStream fos = null;
-		ObjectOutputStream buf = null;
+		FileWriter fw = null;
+		BufferedWriter buf = null;
 		try
 		{
-			fos = new FileOutputStream(file);
-			buf = new ObjectOutputStream(fos);
-			buf.writeObject(this);
+			fw = new FileWriter(file);
+			buf = new BufferedWriter(fw);
+			buf.write(content);
 			buf.close();
 		}
 		catch(IOException ioe)
