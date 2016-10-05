@@ -3,10 +3,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 
@@ -60,14 +58,15 @@ public class TextNote extends Note
 	
 	public void exportTextToFile(String pathFolder)
 	{
+		String root = "C:\\Users\\Fong\\git\\comp3021lab";
 		String title = getTitle().replaceAll(" ","_");
 		if(pathFolder.equals(""))
 		{
-			pathFolder = "C:\\Users\\Fong\\git\\comp3021lab";
+			pathFolder = root;
 		}
 		else if( (pathFolder.length() < 3 || !pathFolder.substring(0, 3).equals("C:\\")) && !pathFolder.substring(0, 1).equals("\\") )
 		{
-			pathFolder = "C:\\Users\\Fong\\git\\comp3021lab" + File.separator + pathFolder;
+			pathFolder = root + File.separator + pathFolder;
 		}
 		File file = new File( pathFolder + File.separator + title + ".txt");
 		FileWriter fw = null;
