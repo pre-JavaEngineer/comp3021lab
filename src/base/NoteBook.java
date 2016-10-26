@@ -131,4 +131,14 @@ public class NoteBook implements Serializable
 			e.printStackTrace();
 		}
 	}
+	
+	public int getNoteNum()
+	{
+		int noteNum = 0;
+		for(Folder f:folders)
+		{
+			noteNum += f.getNotes().size();
+		}
+		return noteNum;
+	}
 }

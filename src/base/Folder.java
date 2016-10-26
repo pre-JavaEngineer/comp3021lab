@@ -80,75 +80,86 @@ public class Folder implements Comparable<Folder>,Serializable
 	{
 		List<Note> targetNotes = new ArrayList<Note>();
 		String[] keyword = keywords.split(" ");
-		Boolean contain;
-		Boolean containContent = false;
+
 		for(Note note:notes)
 		{
-			//check the title of the note.
-			String title = note.getTitle();
-			contain = true;
-			for(int i=0; i < keyword.length; i++)
+			Boolean containTitle = true;
+			Boolean containContent = true;
+			
+			//First check if the title of each note contains the keywords
+			for(int i = 0; i < keyword.length; i++)
 			{
-				if(keyword[i].equals("or") || keyword[i].equals("OR") || keyword[i].equals("Or") || keyword[i].equals("oR") )
+				//keyword[i] is not associated with "or", so it must be contained in the Note
+				if(!keyword[i].toLowerCase().equals("or") && !( ( i-1 > 0 && keyword[i-1].toLowerCase().equals("or") ) || ( i+2 < keyword.length && keyword[i+1].toLowerCase().equals("or") ) ) )
 				{
-
-					if( !((title.toLowerCase().contains(keyword[i-1].toLowerCase())) 
-							||(title.toLowerCase().contains(keyword[i+1].toLowerCase()) )))
-					{
-						contain = false;
-						break;
-					}
-					else
-						continue;
-				}
-				else if( !((i-1 > 0 && (keyword[i-1] == "or" || keyword[i-1] != "OR" || keyword[i-1] != "oR" || keyword[i-1] != "Or") )
-						|| (i+2 < keyword.length && (keyword[i+1] == "or" || keyword[i+1] != "OR" || keyword[i+1] != "oR" || keyword[i+1] != "Or"))) )
-				{
-					if(!(title.toLowerCase().contains(keyword[i].toLowerCase())))
-					{
-						contain = false;
-						break;
-					}
-				}
-			}
-			if (note instanceof TextNote)
-			{
-				//check the title of the note.
-				String content = note.getContent();
-				containContent = true;
-				for(int i=0; i < keyword.length; i++)
-				{
-					if(keyword[i].equals("or") || keyword[i].equals("OR") || keyword[i].equals("Or") || keyword[i].equals("oR") )
-					{
-
-						if( !((content.toLowerCase().contains(keyword[i-1].toLowerCase())) 
-								||(content.toLowerCase().contains(keyword[i+1].toLowerCase()) )))
+					if (!note.getTitle().toLowerCase().contains(keyword[i].toLowerCase()))
 						{
-							containContent = false;
-							break;
-						}
-						else
-							continue;
-					}
-					else if( !((i-1 > 0 && (keyword[i-1] == "or" || keyword[i-1] != "OR" || keyword[i-1] != "oR" || keyword[i-1] != "Or") )
-							|| (i+2 < keyword.length && (keyword[i+1] == "or" || keyword[i+1] != "OR" || keyword[i+1] != "oR" || keyword[i+1] != "Or"))) )
-					{
-						if(!(content.toLowerCase().contains(keyword[i].toLowerCase())))
-						{
-							containContent = false;
-							break;
+							containTitle = false;
 						}
 					}
+			
+				//keyword[i] has or-relationship with another(other) keyword(s)
+				//Firstly, check how many keyword[n](n<i) having or-relationship with keyword[i]
+				if( ( i-1 > 0 && keyword[i-1].toLowerCase().equals("or") ) && !( i+2 < keyword.length && keyword[i+1].toLowerCase().equals("or") ) )
+				{
+					int numOfKeyWordInChain = 1;
+					boolean allNotContain = true;
+					for(int k = i-1; k > 0; k -= 2)
+					{
+						if(keyword[k].equals("or") || keyword[k].equals("OR") || keyword[k].equals("oR") || keyword[k].equals("Or"))
+							numOfKeyWordInChain += 1;
+					}
+
+					for(int j = numOfKeyWordInChain - 1, m = 0; j >= 0; j--, m += 2)
+					{
+						if(note.getTitle().toLowerCase().contains(keyword[i-m].toLowerCase()))
+							allNotContain = false;
+						
+					}
+					if(allNotContain)
+						containTitle = false;
 				}
+				
+				//Secondly, check if the note is a text note, if so check the content if it contain the keywords
+				if(note instanceof TextNote)
+				{
+					if(!keyword[i].toLowerCase().equals("or") && !( ( i-1 > 0 && keyword[i-1].toLowerCase().equals("or") ) || ( i+2 < keyword.length && keyword[i+1].toLowerCase().equals("or") ) ) )
+					{
+						if (!note.getContent().toLowerCase().contains(keyword[i].toLowerCase()))
+							{
+								containTitle = false;
+							}
+						}
+				
+					//keyword[i] has or-relationship with another(other) keyword(s)
+					//Firstly, check how many keyword[n](n<i) having or-relationship with keyword[i]
+					if( ( i-1 > 0 && keyword[i-1].toLowerCase().equals("or") ) && !( i+2 < keyword.length && keyword[i+1].toLowerCase().equals("or") ) )
+					{
+						int numOfKeyWordInChain = 1;
+						boolean allNotContain = true;
+						for(int k = i-1; k > 0; k -= 2)
+						{
+							if(keyword[k].equals("or") || keyword[k].equals("OR") || keyword[k].equals("oR") || keyword[k].equals("Or"))
+								numOfKeyWordInChain += 1;
+						}
+
+						for(int j = numOfKeyWordInChain - 1, m = 0; j >= 0; j--, m += 2)
+						{
+							if(note.getContent().toLowerCase().contains(keyword[i-m].toLowerCase()))
+								allNotContain = false;
+							
+						}
+						if(allNotContain)
+							containContent = false;
+					}
+				}
+				else 
+					containContent = false;
 			}
-			if (contain || containContent)
-			{
+			
+			if (containTitle || containContent)
 				targetNotes.add(note);
-			}
 		}
-		
 		return targetNotes;
 	}
-	
-	
 }
