@@ -10,7 +10,7 @@ import base.NoteBook;
 public class testLab3 {
 	public static void main(String args[]){
 		NoteBook nb = new NoteBook();
-		nb.createTextNote("Java", "COMP30213021 syllabus", "Be able to implement object-oriented concepts in Java.");
+		nb.createTextNote("Java", "COMP3021 syllabus", "Be able to implement object-oriented concepts in Java.");
 		nb.createTextNote("Java", "course information", "Introduction to Java Programming. Fundamentals include language syntax, object-oriented programming, inheritance, interface, polymorphism, exception handling, multithreading and lambdas.");
 		nb.createTextNote("Lab", "Lab requirement","Each lab has 2 credits, 1 for attendence and the other is based the completeness of your lab.");
 		

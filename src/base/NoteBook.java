@@ -82,6 +82,16 @@ public class NoteBook implements Serializable
 		return folders;
 	}
 	
+	public Folder getFolderByName(String folderName)
+	{
+		for(Folder f:folders)
+		{
+			if(f.getName().equals(folderName))
+				return f;
+		}
+		return null;
+	}
+	
 	public void sortFolders()
 	{
 		Collections.sort(folders);
@@ -140,5 +150,11 @@ public class NoteBook implements Serializable
 			noteNum += f.getNotes().size();
 		}
 		return noteNum;
+	}
+	
+	public void addFolder(String folderName)
+	{
+		// TODO
+		folders.add(new Folder(folderName));
 	}
 }

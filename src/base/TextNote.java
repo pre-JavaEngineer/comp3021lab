@@ -112,4 +112,9 @@ public class TextNote extends Note
 		}
 		return r;
 	}
+	
+	public void setContent(String inputContent)
+	{
+		content = inputContent; 
+	}
 }

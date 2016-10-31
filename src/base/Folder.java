@@ -22,6 +22,14 @@ public class Folder implements Comparable<Folder>,Serializable
 		notes.add(note);
 	}
 	
+	public boolean removeNotes(String title) 
+	{
+		// TODO
+		// Given the title of the note, delete it from the folder.
+		// Return true if it is deleted successfully, otherwise return false.
+		return notes.remove(getNoteByTitle(title));
+	}
+	
 	public String getName()
 	{
 		return name;
@@ -76,6 +84,16 @@ public class Folder implements Comparable<Folder>,Serializable
 		Collections.sort(notes);
 	}
 	
+	public Note getNoteByTitle(String title)
+	{
+		for(Note n:notes)
+		{
+			if(n.getTitle().equals(title))
+				return n;
+		}
+		return null;
+	}
+	
 	public List<Note> searchNotes(String keywords)
 	{
 		List<Note> targetNotes = new ArrayList<Note>();
@@ -93,10 +111,10 @@ public class Folder implements Comparable<Folder>,Serializable
 				if(!keyword[i].toLowerCase().equals("or") && !( ( i-1 > 0 && keyword[i-1].toLowerCase().equals("or") ) || ( i+2 < keyword.length && keyword[i+1].toLowerCase().equals("or") ) ) )
 				{
 					if (!note.getTitle().toLowerCase().contains(keyword[i].toLowerCase()))
-						{
-							containTitle = false;
-						}
+					{
+						containTitle = false;
 					}
+				}
 			
 				//keyword[i] has or-relationship with another(other) keyword(s)
 				//Firstly, check how many keyword[n](n<i) having or-relationship with keyword[i]
@@ -127,7 +145,7 @@ public class Folder implements Comparable<Folder>,Serializable
 					{
 						if (!note.getContent().toLowerCase().contains(keyword[i].toLowerCase()))
 							{
-								containTitle = false;
+								containContent = false;
 							}
 						}
 				
@@ -156,7 +174,6 @@ public class Folder implements Comparable<Folder>,Serializable
 				else 
 					containContent = false;
 			}
-			
 			if (containTitle || containContent)
 				targetNotes.add(note);
 		}
